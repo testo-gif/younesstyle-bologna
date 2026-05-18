@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Younesstyle - Bologna — Bologna</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--purple:#c084fc;--dark:#1a1a1a;--light:#faf9f7}
+body{font-family:'Inter',sans-serif;background:var(--light);color:var(--dark)}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',serif}
+#buy-banner{position:fixed;top:0;left:0;width:100%;background:#000;color:#fff;z-index:9999;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+#buy-banner p{font-size:14px}
+#buy-banner a{background:#ff4d00;color:#fff;text-decoration:none;padding:8px 18px;border-radius:4px;font-size:13px;font-weight:500;white-space:nowrap;flex-shrink:0}
+@media(max-width:600px){#buy-banner .dt{display:none}}
+@media(min-width:601px){#buy-banner .mob{display:none}}
+.hero{height:100vh;background:url('https://maps.googleapis.com/maps/api/place/photo?maxwidth=1920&photoreference=Ab43m-vmNkRbWItpBbY79C1gV1P4n3iraVfAOPa-xnN0dN6KRgpQow9aRoFg13oiy0wWWK13Dz7uTFlRMl89pxU6YGZU901LPVzM9nQXuuauiwbQrVAaggu-08hnOsxcVZO3iwK1NdSh9vP6vGowYi3p7nKJeO_yxOe9VyCBenakKPLBS5cv9gUrFrwymmRKag85Wiubjau1xcbRZHFi6ex776ITQ-yD5Sph7befP49dnZgM_2GceYgZMhutY7eglgz081jRu0_LwrLc4cWviyYgO98e3k8fy2OlgTShkDbEiHEMaXsuqz3f1ZE-s0tQyJUy4OuKdNRxfPKAfZwCXfWNgGJrGAbQhJ2sXAUbTyfb1gpTA3GFH8pbQjiB5_fxnXIxWCF7ZlIcACY7nOakvkyj4EuRwy1LkJ28oc9Cg5CCRz4&key=AIzaSyCYXbAb5oATfgJRzDY7v7_wNhQ6F7PltAM') center/cover no-repeat;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;margin-top:44px}
+.hero::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.48)}
+.hero-c{position:relative;z-index:1;color:#fff;padding:0 20px}
+.hero-c h1{font-size:clamp(2.2rem,6vw,5rem);font-weight:300;letter-spacing:.04em}
+.hero-c p{font-size:1.05rem;margin-top:10px;opacity:.9}
+.hero-c .stars{margin-top:14px;font-size:1.1rem;color:#ffd700}
+.hero-c a.cta{display:inline-block;margin-top:24px;padding:13px 34px;background:var(--purple);color:#fff;text-decoration:none;border-radius:2px;font-size:.95rem;letter-spacing:.06em}
+.numeri{display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:3px solid var(--purple)}
+@media(max-width:600px){.numeri{grid-template-columns:repeat(2,1fr)}}
+.num{padding:36px 16px;text-align:center;border-right:1px solid #eee}
+.num:last-child{border-right:none}
+.num span{display:block;font-family:'Cormorant Garamond',serif;font-size:2.8rem;color:var(--purple);font-weight:300}
+.num p{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#666;margin-top:5px}
+.sec{padding:72px 5% 56px}
+.sec-t{font-size:clamp(1.8rem,4vw,3rem);font-weight:300;text-align:center;margin-bottom:10px}
+.sec-s{text-align:center;color:#666;font-size:.92rem;margin-bottom:44px}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;max-width:1100px;margin:0 auto}
+.sc{background:#fff;padding:30px;border-radius:3px;border-left:3px solid var(--purple);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.sc h3{font-size:1.25rem;font-weight:400;margin-bottom:8px}
+.sc p{color:#666;font-size:.88rem;line-height:1.6;margin-bottom:14px}
+.sc .price{font-size:1.35rem;color:var(--purple);font-family:'Cormorant Garamond',serif}
+.about{background:#fff;padding:72px 5%}
+.about-in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media(max-width:768px){.about-in{grid-template-columns:1fr}}
+.about-imgs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.about-imgs img{width:100%;height:190px;object-fit:cover;border-radius:2px}
+.about-imgs img:first-child{grid-column:1/-1;height:240px}
+.about-t h2{font-size:2.2rem;font-weight:300;margin-bottom:18px}
+.about-t p{color:#555;line-height:1.8;margin-bottom:14px}
+.gallery{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+@media(max-width:600px){.gallery{grid-template-columns:repeat(2,1fr)}}
+.gallery img{width:100%;height:200px;object-fit:cover}
+/* RECENSIONI GOOGLE STYLE */
+.recensioni{background:var(--light);padding:72px 5%}
+.rec-inner{max-width:1100px;margin:0 auto}
+.rec-top{display:flex;align-items:flex-start;gap:40px;margin-bottom:40px;flex-wrap:wrap}
+.rec-score{min-width:160px}
+.rec-score .big-num{font-family:'Cormorant Garamond',serif;font-size:5rem;font-weight:300;line-height:1;color:var(--dark)}
+.rec-score .big-stars{font-size:1.4rem;color:#f59e0b;margin:4px 0}
+.rec-score .rec-count{font-size:.85rem;color:#666}
+.rec-score .rec-divider{width:1px;background:#ddd;height:80px;margin:0 20px;align-self:center}
+.rec-title h2{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:300;line-height:1.2}
+.rec-carousel{position:relative}
+.rec-track{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+@media(max-width:700px){.rec-track{grid-template-columns:1fr}}
+.rev-card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:24px;position:relative;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.rev-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.rev-meta .rev-name{font-weight:600;font-size:.95rem}
+.rev-meta .rev-when{font-size:.8rem;color:#888;margin-top:2px}
+.rev-stars{font-size:1rem;color:#f59e0b;margin-bottom:10px}
+.rev-text{font-size:.9rem;line-height:1.65;color:#444;font-style:italic}
+.rev-g{position:absolute;bottom:16px;right:16px}
+.rec-nav{display:flex;gap:10px;margin-top:24px}
+.rec-nav button{width:40px;height:40px;border-radius:50%;border:1.5px solid #ccc;background:#fff;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:border-color .2s}
+.rec-nav button:hover{border-color:var(--purple)}
+.orari{background:#fff;padding:72px 5%}
+.orari table{width:100%;max-width:560px;border-collapse:collapse;margin:28px auto 0}
+.orari td{padding:13px 0;border-bottom:1px solid #eee;font-size:.92rem}
+.orari td:last-child{text-align:right;color:var(--purple)}
+.faq{padding:72px 5%;background:var(--light)}
+.faq-in{max-width:780px;margin:0 auto}
+details{border-bottom:1px solid #e0e0e0;padding:18px 0}
+details summary{font-size:1rem;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details summary::after{content:'+';font-size:1.3rem;color:var(--purple)}
+details[open] summary::after{content:'−'}
+details p{color:#555;line-height:1.7;margin-top:12px;font-size:.92rem}
+#map{height:380px;width:100%}
+.contatti{background:#1a1a1a;color:#fff;padding:56px 5%;text-align:center}
+.contatti h2{font-size:1.9rem;font-weight:300;margin-bottom:8px}
+.contatti p{color:#aaa;margin-bottom:5px}
+.contatti a{color:var(--purple);text-decoration:none}
+footer{background:#111;color:#666;text-align:center;padding:22px;font-size:.78rem}
+footer a{color:#888;cursor:pointer}
+.wa{position:fixed;bottom:22px;right:22px;background:#25D366;color:#fff;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:24px;box-shadow:0 4px 16px rgba(37,211,102,.4);z-index:8888}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99999;align-items:center;justify-content:center}
+.modal.open{display:flex}
+.modal-box{background:#fff;padding:36px;max-width:580px;width:90%;max-height:80vh;overflow-y:auto;border-radius:3px}
+.modal-box h3{margin-bottom:14px;font-size:1.5rem;font-weight:300}
+.modal-box p{color:#555;line-height:1.7;font-size:.88rem;margin-bottom:8px}
+.modal-close{float:right;background:none;border:1px solid #ccc;padding:5px 12px;cursor:pointer;border-radius:2px}
+</style>
+</head>
+<body>
+<div id="buy-banner">
+  <p class="dt">Ti piace questo sito? Il tuo potrebbe essere identico — online in 5 giorni per €99</p>
+  <p class="mob">Vuoi un sito così? €99</p>
+  <a href="https://buy.stripe.com/8x25kC7mo39M0bN1Mv1B601" target="_blank">Inizia ora →</a>
+</div>
+<section class="hero">
+  <div class="hero-c">
+    <h1>Younesstyle - Bologna</h1>
+    <p>Via Sebastiano Serlio,  34 · Bologna</p>
+    <div class="stars">★★★★ 4.1 · 177 recensioni Google</div>
+    <a href="https://wa.me/393299715265" class="cta" target="_blank">Prenota su WhatsApp</a>
+  </div>
+</section>
+<div class="numeri">
+  <div class="num"><span>4.1</span><p>Rating Google</p></div>
+  <div class="num"><span>177</span><p>Recensioni</p></div>
+  <div class="num"><span>15+</span><p>Anni esperienza</p></div>
+  <div class="num"><span>Bologna</span><p>Città</p></div>
+</div>
+<section class="sec" style="background:var(--light)">
+  <h2 class="sec-t">I Nostri Servizi</h2>
+  <p class="sec-s">Trattamenti professionali per ogni esigenza</p>
+  <div class="services">
+    <div class="sc"><h3>Taglio Donna</h3><p>Taglio su misura con consulenza personalizzata.</p><div class="price">da €35</div></div>
+    <div class="sc"><h3>Colore & Meches</h3><p>Colorazioni professionali con prodotti di alta qualità.</p><div class="price">da €55</div></div>
+    <div class="sc"><h3>Piega & Styling</h3><p>Piega professionale per ogni occasione.</p><div class="price">da €20</div></div>
+    <div class="sc"><h3>Trattamenti Capelli</h3><p>Maschere nutrienti, cheratina e ricostruzione.</p><div class="price">da €30</div></div>
+    <div class="sc"><h3>Taglio Uomo</h3><p>Taglio classico o moderno con finiture impeccabili.</p><div class="price">da €20</div></div>
+    <div class="sc"><h3>Acconciature Sposa</h3><p>Acconciature per matrimoni ed eventi speciali.</p><div class="price">da €80</div></div>
+  </div>
+</section>
+<section class="about">
+  <div class="about-in">
+    <div class="about-imgs">
+      <img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference=Ab43m-vmNkRbWItpBbY79C1gV1P4n3iraVfAOPa-xnN0dN6KRgpQow9aRoFg13oiy0wWWK13Dz7uTFlRMl89pxU6YGZU901LPVzM9nQXuuauiwbQrVAaggu-08hnOsxcVZO3iwK1NdSh9vP6vGowYi3p7nKJeO_yxOe9VyCBenakKPLBS5cv9gUrFrwymmRKag85Wiubjau1xcbRZHFi6ex776ITQ-yD5Sph7befP49dnZgM_2GceYgZMhutY7eglgz081jRu0_LwrLc4cWviyYgO98e3k8fy2OlgTShkDbEiHEMaXsuqz3f1ZE-s0tQyJUy4OuKdNRxfPKAfZwCXfWNgGJrGAbQhJ2sXAUbTyfb1gpTA3GFH8pbQjiB5_fxnXIxWCF7ZlIcACY7nOakvkyj4EuRwy1LkJ28oc9Cg5CCRz4&key=AIzaSyCYXbAb5oATfgJRzDY7v7_wNhQ6F7PltAM" alt="Salone" loading="lazy">
+      <img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference=Ab43m-vO48QNviDfwmHaA3Q8aOnVGOSCLjnmK6tKIUeATaGSnlN_x9H8qp2uiL9l4T1ViuFCGelrr33DM1stLFyTQunjx2rRrxUjVrMdxU8XORedrYt9KcKCWkab8QwzVo9jTm4uG6kfDL97LP3OFq45NQVSDX0j1BBVQrx0D6_ilzRm_zd7eTLSPv6d7d3h4M3LQRbtPIjSTukG3cwQ9C7j4UZjYo8M_2bul7vXS_44VgOe1QzdMgNuvkGd9zliKObmoLDVWUcjS6EsO-MnoE-mqTBoCDxlKlWwf1jD9YYSgUU2JlbtB5v_cpFKmy65jfOX-anxVfvrZ9PcQ6KRdg-1_OIy_u59hlTq4tVsZbQm2LdsWrMxtd5n20m01217Wgl-LAOe4XbNHt6q7pgFKlrm4487oqBfdp_XDXSfAXtw4oXTXw&key=AIzaSyCYXbAb5oATfgJRzDY7v7_wNhQ6F7PltAM" alt="Team" loading="lazy">
+      <img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=600&photoreference=Ab43m-uP8cis9AuWwC0C5zpROJbNW6r7KZnQ4jtglHJkfJ1wO2N33730VA5r1O5l9K9OeLqA2pt1LKJmhl_nkoC7MccLU9767acPrvZLygwLdacMMR7eQZji-68mbjbLYINs6UXrZx-sNDX1Ht8XSSg1H_NBUQToM62MNqVwDhhKba03aiX7eHPhRFAEvoK4BCx9HXSQgzXgYBO3pc4wE63W3FpQWCGS0fk5oq1tmRwpzEzO2UaV2cM8Qe9sOeN-rq-BULu_oCZLDaHmXnIOJ-teL1iwx6Uf-XFfNMPhw66K4-sdkrfdI6_GpSCXLX2urQ6dC_XNEEo9OMseN5ZwOVvDg4eobT2wGpOyi9Fl-JG0UR8rD9Qcmj0VZbkUaqvoc0lC75ckE18DkuoTnXckpBQbFBQDJWL3nuSSlN5kQYcuTQGv1WY&key=AIzaSyCYXbAb5oATfgJRzDY7v7_wNhQ6F7PltAM" alt="Lavoro" loading="lazy">
+    </div>
+    <div class="about-t">
+      <h2>Chi Siamo</h2>
+      <p>Siamo un salone con oltre 15 anni di esperienza nel cuore di Bologna. La nostra passione per i capelli si riflette in ogni servizio.</p>
+      <p>Il nostro team si aggiorna costantemente sulle ultime tendenze per offrirti sempre il meglio.</p>
+      <p>Utilizziamo solo prodotti di qualità professionale, rispettosi dei capelli e dell'ambiente.</p>
+    </div>
+  </div>
+</section>
+<div class="gallery"><img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=Ab43m-vO48QNviDfwmHaA3Q8aOnVGOSCLjnmK6tKIUeATaGSnlN_x9H8qp2uiL9l4T1ViuFCGelrr33DM1stLFyTQunjx2rRrxUjVrMdxU8XORedrYt9KcKCWkab8QwzVo9jTm4uG6kfDL97LP3OFq45NQVSDX0j1BBVQrx0D6_ilzRm_zd7eTLSPv6d7d3h4M3LQRbtPIjSTukG3cwQ9C7j4UZjYo8M_2bul7vXS_44VgOe1QzdMgNuvkGd9zliKObmoLDVWUcjS6EsO-MnoE-mqTBoCDxlKlWwf1jD9YYSgUU2JlbtB5v_cpFKmy65jfOX-anxVfvrZ9PcQ6KRdg-1_OIy_u59hlTq4tVsZbQm2LdsWrMxtd5n20m01217Wgl-LAOe4XbNHt6q7pgFKlrm4487oqBfdp_XDXSfAXtw4oXTXw&key=AIzaSyCYXbAb5oATfgJRzDY7v7_wNhQ6F7PltAM" alt="" loading="lazy"><img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=Ab43m-uP8cis9AuWwC0C5zpROJbNW6r7KZnQ4jtglHJkfJ1wO2N33730VA5r1O5l9K9OeLqA2pt1LKJmhl_nkoC7MccLU9767acPrvZLygwLdacMMR7eQZji-68mbjbLYINs6UXrZx-sNDX1Ht8XSSg1H_NBUQToM62MNqVwDhhKba03aiX7eHPhRFAEvoK4BCx9HXSQgzXgYBO3pc4wE63W3FpQWCGS0fk5oq1tmRwpzEzO2UaV2cM8Qe9sOeN-rq-BULu_oCZLDaHmXnIOJ-teL1iwx6Uf-XFfNMPhw66K4-sdkrfdI6_GpSCXLX2urQ6dC_XNEEo9OMseN5ZwOVvDg4eobT2wGpOyi9Fl-JG0UR8rD9Qcmj0VZbkUaqvoc0lC75ckE18DkuoTnXckpBQbFBQDJWL3nuSSlN5kQYcuTQGv1WY&key=AIzaSyCYXbAb5oATfgJRzDY7v7_wNhQ6F7PltAM" alt="" loading="lazy"><img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=Ab43m-vHNDprzLtcjQqa1CEFmn4-JxSOjVlo_FSWFPoJVz49LDIKlp8eaDWPcUYzJaKgaYa9tWPWdZ54vfsEWWMT8e5uXmsODMVn5qsUc7CQ89XU3tnPPZlfpPKd12cI25X4pGLlb5P0MtZZetvb1sXRSBnnKTnZJVJKum4nyCHh43kQqdsNFJCoNys8kemNsiz9zppUwgvNyddEAY-fW3ca4UmbUajsm7qNS4adxjY0UebC3kNWF188sxgKIacrnw_KGrVu2W2rewJG_FLwWQqJAQGhxq7tm8eJIrm0eljBE2Ng40XG0bX25FsEgQN1PslC5f5zK-zu3PBWT7gep56UUGKyLGjCl6OwTlY9o2TrHCYUZNW5cyh3GEhYQjY3U1VCdt9ohxD7h77eOQxWNCB7fs_inNUwzmNWFm6Xg0Lx8qY&key=AIzaSyCYXbAb5oATfgJRzDY7v7_wNhQ6F7PltAM" alt="" loading="lazy"><img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=Ab43m-tYAWMMJiASkF2HKkuJTWhhcHOF8py4125mrJa9dL_QegjWRtjErZTNGswSIiXTLEgHSduxPGIjoHUXtS-f7NdcM8l34B4r6u-dLOxbxWfub7HSW7gfqYJowvGWjVzIhUGZV3WURNF2FZ6Z4kgLT7dQrijrGJ8iNVJMZlh_Tcy4MGoJThBBVkvXoT72YAyyZd8bJQaqob2dcG55OTep2dbbIuuT37H93AH_uXI7iB0Nxpz6XDAUQJ2eAUmmyjnA9F3LI3m-AmYp0EFa6S8xWLK79AvlxgqdJLL4HFu1oLTzsw&key=AIzaSyCYXbAb5oATfgJRzDY7v7_wNhQ6F7PltAM" alt="" loading="lazy"><img src="https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=Ab43m-s-kK4IDRSdgz9FXiu6RRKvRjNEIsDLdwrh3cGwBRAevGqjNruLE1o0D6EMuEx-B7A16tOmrhANG6bd_Fa_u8riBKcRTY6sYgK3m9VNjtIJKeBWdDfR53gG7orRSWWnW1--sLYCHwpFLTQsKaMFV1S1pZ5bjph-U5vsVhZ_yOWLTUDO7jq6revI2wI36j84h1iFS5LnmZe9o7Bo43_xmSIkL-pWFlp1fLeggfopf2zbKLWPsQghhG4HTlywr6f_PyqlNgLeWgjEgE5acxGaqBhElFyvu7IfsS6QcSaPtwdAQw&key=AIzaSyCYXbAb5oATfgJRzDY7v7_wNhQ6F7PltAM" alt="" loading="lazy"></div>
+
+<!-- RECENSIONI GOOGLE STYLE -->
+<section class="recensioni">
+  <div class="rec-inner">
+    <div class="rec-top">
+      <div class="rec-score">
+        <div class="big-num">4.1</div>
+        <div class="big-stars">★★★★☆</div>
+        <div class="rec-count">177 recensioni Google</div>
+      </div>
+      <div class="rec-score rec-divider"></div>
+      <div class="rec-title"><h2>Cosa dicono<br>i nostri clienti</h2></div>
+    </div>
+    <div class="rec-carousel">
+      <div class="rec-track" id="rec-track">
+        <div class="rev-card">
+  <div class="rev-header">
+    <img src="https://lh3.googleusercontent.com/a/ACg8ocIqu09uU9WnmHnqBm0IsQXnaWl5l_Ttq-mTwVC_56RKYHIkB10=s128-c0x00000000-cc-rp-mo" alt="BU" style="width:44px;height:44px;border-radius:50%;object-fit:cover">
+    <div class="rev-meta"><div class="rev-name">Bora Unut</div><div class="rev-when">6 mesi fa</div></div>
+  </div>
+  <div class="rev-stars">★★☆☆☆</div>
+  <p class="rev-text">"Ho dato due stelle perché é economico. Se volete un bel servizio e degli belli capelli non ci andate"</p>
+  <div class="rev-g"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>
+</div><div class="rev-card">
+  <div class="rev-header">
+    <img src="https://lh3.googleusercontent.com/a/ACg8ocIB9CSejrUk6wFBcnnRVD3LoIdhGfYq7FOOOitpnR08SWL8ZQ=s128-c0x00000000-cc-rp-mo" alt="MB" style="width:44px;height:44px;border-radius:50%;object-fit:cover">
+    <div class="rev-meta"><div class="rev-name">Mario Bifolco</div><div class="rev-when">1 anno fa</div></div>
+  </div>
+  <div class="rev-stars">★★★★☆</div>
+  <p class="rev-text">"Sfumatura fatta molto bene, ci vado ogni settimana, non capisco il perché fuori c’è scritto 7€ ed oggi se ne sono presi 10 senza la barba.
+Non sono in3€ che fanno la differenza ma almeno togliete il cartellone fuori, potrebbero venire ragazzi con i soldi contanti, magari dati dai loro genitori e poi"</p>
+  <div class="rev-g"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>
+</div><div class="rev-card">
+  <div class="rev-header">
+    <img src="https://lh3.googleusercontent.com/a/ACg8ocL0l4mJvkO1GBsIDqWoEVm6ZoXC8D3Or1al3BgQ81UE2k9uEQ=s128-c0x00000000-cc-rp-mo-ba4" alt="S" style="width:44px;height:44px;border-radius:50%;object-fit:cover">
+    <div class="rev-meta"><div class="rev-name">Sandrino</div><div class="rev-when">1 anno fa</div></div>
+  </div>
+  <div class="rev-stars">★☆☆☆☆</div>
+  <p class="rev-text">"Esperienza da non ripetere. E non mi riferisco al taglio che non è stato sfumato e non è omogeneo perché ovviamente bisogna accontentarsi a questo prezzo, quindi non avevo alte aspettative.
+Il problema principale è stato l'utilizzo del rasoio elettrico come se fosse una zappa o un martello pneumatic"</p>
+  <div class="rev-g"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>
+</div><div class="rev-card">
+  <div class="rev-header">
+    <img src="https://lh3.googleusercontent.com/a/ACg8ocJmXb7RKELNX5163h4hN-BGPnuOdUT5dCAtD9FVSQ-ovVfI4A=s128-c0x00000000-cc-rp-mo" alt="TM" style="width:44px;height:44px;border-radius:50%;object-fit:cover">
+    <div class="rev-meta"><div class="rev-name">Timur Munurov</div><div class="rev-when">1 anno fa</div></div>
+  </div>
+  <div class="rev-stars">★☆☆☆☆</div>
+  <p class="rev-text">"I recently visited Younesstyle, and it was the worst experience I've ever had. The barber who cut my hair was completely incompetent. Despite explaining that I have scars on my head that needed to be hidden, he cut my hair according to his own opinion, disregarding my instructions entirely. He didn'"</p>
+  <div class="rev-g"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>
+</div><div class="rev-card">
+  <div class="rev-header">
+    <img src="https://lh3.googleusercontent.com/a-/ALV-UjVStQKKhJUmuKB3u2ijs9wepb23htBwqmCWXZjcFd5q-vVROAky=s128-c0x00000000-cc-rp-mo-ba2" alt="GP" style="width:44px;height:44px;border-radius:50%;object-fit:cover">
+    <div class="rev-meta"><div class="rev-name">Guglielmo Piumetti</div><div class="rev-when">8 mesi fa</div></div>
+  </div>
+  <div class="rev-stars">★★★★★</div>
+  <p class="rev-text">"Il miglior rapporto qualità-prezzo di tutta Bologna! Consigliato al 100%!"</p>
+  <div class="rev-g"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg></div>
+</div>
+      </div>
+      <div class="rec-nav">
+        <button onclick="slide(-1)" aria-label="Precedente">←</button>
+        <button onclick="slide(1)" aria-label="Successivo">→</button>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+var allCards=document.querySelectorAll('.rev-card'),idx=0,perPage=window.innerWidth<700?1:2;
+function show(){allCards.forEach(function(c,i){c.style.display=(i>=idx&&i<idx+perPage)?'block':'none'})}
+function slide(d){idx=Math.max(0,Math.min(idx+d,allCards.length-perPage));show()}
+show();
+window.addEventListener('resize',function(){perPage=window.innerWidth<700?1:2;show()});
+</script>
+
+<section class="orari">
+  <h2 class="sec-t">Orari di Apertura</h2>
+  <table>
+    <tr><td>Lunedì</td><td>Chiuso</td></tr>
+    <tr><td>Martedì</td><td>09:00 – 18:30</td></tr>
+    <tr><td>Mercoledì</td><td>09:00 – 18:30</td></tr>
+    <tr><td>Giovedì</td><td>09:00 – 18:30</td></tr>
+    <tr><td>Venerdì</td><td>09:00 – 19:00</td></tr>
+    <tr><td>Sabato</td><td>08:30 – 17:00</td></tr>
+    <tr><td>Domenica</td><td>Chiuso</td></tr>
+  </table>
+</section>
+<section class="faq">
+  <div class="faq-in">
+    <h2 class="sec-t">Domande Frequenti</h2>
+    <details><summary>Devo prenotare in anticipo?</summary><p>Consigliamo sempre di prenotare per garantire la disponibilità. Accettiamo anche clienti senza appuntamento quando possibile.</p></details>
+    <details><summary>Quanto dura un trattamento colore?</summary><p>Un colore completo richiede in media 2-3 ore. Per meches o balayage, prevedere 3-4 ore.</p></details>
+    <details><summary>Usate prodotti senza ammoniaca?</summary><p>Sì, offriamo colorazioni tradizionali e alternative senza ammoniaca per capelli sensibili.</p></details>
+    <details><summary>Fate acconciature per matrimoni?</summary><p>Assolutamente sì! Servizio completo per sposa con prova acconciatura inclusa.</p></details>
+    <details><summary>Quali metodi di pagamento accettate?</summary><p>Contanti, carte di credito/debito e pagamenti digitali (Apple Pay, Google Pay).</p></details>
+  </div>
+</section>
+<div id="map"></div>
+<script>
+var map=L.map('map').setView([44.5079026,11.3550068],15);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
+L.marker([44.5079026,11.3550068]).addTo(map).bindPopup('<b>Younesstyle - Bologna</b><br>Via Sebastiano Serlio,  34').openPopup();
+</script>
+<section class="contatti">
+  <h2>Contattaci</h2>
+  <p style="margin-top:14px">Via Sebastiano Serlio,  34, 40128 Bologna</p>
+  <p><a href="tel:+39 329 971 5265">+39 329 971 5265</a></p>
+  <p style="margin-top:18px"><a href="https://wa.me/393299715265" target="_blank" style="background:var(--purple);color:#fff;padding:11px 26px;border-radius:2px;text-decoration:none;display:inline-block">Scrivici su WhatsApp</a></p>
+</section>
+<footer>
+  <p>© 2025 Younesstyle - Bologna · Via Sebastiano Serlio,  34, 40128 Bologna · <a onclick="document.getElementById('pm').classList.add('open')">Privacy Policy</a></p>
+</footer>
+<div id="pm" class="modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('pm').classList.remove('open')">Chiudi</button>
+    <h3>Privacy Policy</h3>
+    <p>Questo sito non raccoglie dati personali, non usa cookie di profilazione e non effettua tracking.</p>
+    <p>Titolare: Younesstyle - Bologna, Via Sebastiano Serlio,  34, 40128 Bologna. Contatto: <a href="tel:+39 329 971 5265">+39 329 971 5265</a>.</p>
+    <p>Ultimo aggiornamento: maggio 2025.</p>
+  </div>
+</div>
+<a href="https://wa.me/393299715265" class="wa" target="_blank">&#x1F4AC;</a>
+</body></html>
